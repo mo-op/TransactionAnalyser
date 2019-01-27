@@ -89,7 +89,7 @@ for transaction in transactions:
 	'Date': transaction[1],
 	'Time': transaction[2],
 	'Amount': transaction[7],
-	'Price': transaction[8],
+	'Price': float(transaction[8]),
 	'Customer':{
 		'ID': transaction[3],
 		'Segment': c_segment,
@@ -115,12 +115,12 @@ print ("Combining files ....")
 print(str(len(combined_transactions))+" combined")
 #print combined_transactions
 
-with open('dernormalisedData.json', 'w') as outfile:  
+with open('denormalisedData.json', 'w') as outfile:  
     json.dump(combined_transactions, outfile)
 
 print ("Testing ...")
 
-filePath = "dernormalisedData.json"
+filePath = "denormalisedData.json"
 with open(filePath) as f:
 	transactions_ = json.load(f)
 print(str(len(transactions_))+" in json file!")

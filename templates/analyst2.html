@@ -36,9 +36,6 @@
       padding: 0px 10px;
     }
 
-    .results{
-      padding: 40px,40px;
-    }
 
     
        .formContent {
@@ -81,58 +78,36 @@
     }
     </style>
     <body style="color: #404040;background: #0ca3d2;">
-
-      <!-- Side navigation -->
-
-      <div class="sidenav" style="color:white">
+            <div class="sidenav" style="color:white">
         <h2>Dashboard</h2>
-        {% if most_visted %}
         <h3>Hello, Analyst</h3>
         <a href="/">Sign Out</a>
-        {% endif %}
       </div>
-
       <!-- Page content -->
       <div class="main">
-
-        <div class="login formContent">
+   <div class="login formContent">
           <!--Log In Form-->        
           {% if form %}
-          <h2 style = "text-align: center;">Log In:</h2>
-          <form action = "" method = post>
+          <h2 style = "text-align: center;">Query:</h2>
+          <form action = "" method ="POST">
              <fieldset>            
                 <div style = font-size:20px; font-weight:bold; margin-left:150px;>
-                   {{ form.username.label }}<br>
-                   {{ form.username }}
+                   {{ form.gasstation.label }}<br>
+                   {{ form.gasstation }}
                    <br>
 
-                   {{ form.password.label }}<br>
-                   {{ form.password }}
-                   <br>
                    {{ form.submit }}
                 </div>
              </fieldset>
           </form>
           <div class="formFooter">
-            <h2>Refer to documentation for usernames</h2>
+            <h2>GS:1-5000;Chain:1-13</h2>
           </div>
           {% endif %}
        </div>
 
-       <div class = "results">
-      <a href="/analystAgain">View Page</a><br>
-       </div>
-      
-      
- <!--   <div class="results"> 
-      results
-      {% if most_visted %}
-      <div style="border-style: solid; border-width: 5px">
-        <h2 style="text-align: center;">Most Visited Gas Station:</h2>
-        <h2 style="text-align: center;">{{most_visited}}</h2>
-      </div>
-    </br>
-      {% endif %}
+    <div class="results">
+      <!--results-->
       {% if num_visitors %}
       {% if gs_id %}
       <div style="border-style: solid; border-width: 5px">
@@ -141,7 +116,14 @@
       </div></br>
       {% endif %}
       {% endif %}
-    </div> -->
+      {% if most_visited %}
+      <div style="border-style: solid; border-width: 5px">
+        <h2 style="text-align: center;">Most visited:</h2>
+        <h2 style="text-align: center;">{{most_visited}}</h2>
+        <h2 style="text-align: center;">{{most_visits}} visits</h2>
+      </div></br>
+      {% endif %}
   </div>
-    </body> 
+  </div>
+</body>
 </html>

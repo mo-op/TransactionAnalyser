@@ -5,7 +5,6 @@ from wtforms import validators, ValidationError
 
 class AnalystForm(FlaskForm):
 	gasstation = IntegerField("Gas Station ID")
-	chain = IntegerField("Chain ID")
 	submit = SubmitField("Query")
 
 class LogInForm(FlaskForm):
