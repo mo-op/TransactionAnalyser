@@ -19,7 +19,7 @@ https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/
 
 # exécuter l'application #
 
-Une fois vote zip en main, dézippez-le et placez vous dans le nouveau dossier. Ouvrez votre CMD à ce niveau là et activez l'environnement virtuel comme ceci:
+Une fois vote zip en main, dézippez-le et placez vous dans le nouveau dossier. Ouvrez votre terminal à ce niveau là et activez l'environnement virtuel comme ceci:
 
 'source /venc/bin/activate'
 
