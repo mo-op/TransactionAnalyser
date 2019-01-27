@@ -1,6 +1,9 @@
 from forms import AnalystForm, LogInForm
 from flask import Flask, render_template, redirect, url_for, request
 from flask_pymongo import PyMongo
+from bson.code import Code
+from bson.son import SON
+
 
 
 import sys
@@ -77,7 +80,7 @@ def userPage():
 		annual_consumption = mongo.db.command('aggregate','ccs',pipeline=pipeline1,explain=False)
 		annual_consumption = annual_consumption["result"][0]["nb"]
 
-		frequency = 10  
+		#frequency = 10  
 		
 		pipeline3 = [{"$match":{"Customer.ID":"31543"}},
 			{"$sort":{"Date":-1,"Time":-1}},
@@ -85,8 +88,8 @@ def userPage():
 			{"$project":{"Customer.ID":1,"Date":1,"Time":1,"GasStation.Country":1}}]
 		#last_trans = str(ccs.aggregate(pipeline))
 		last_trans = (mongo.db.command('aggregate', 'ccs', pipeline=pipeline3,explain=False))
-		print last_trans['result'][0]['Date']
-		return render_template('client.html',annual=annual_consumption,frequency=frequency,last_trans=last_trans['result'][0]['Date'])
+
+		return render_template('client.html',annual=annual_consumption,last_trans=last_trans['result'][0]['Date'])
 	return render_template('client.html',form=form)
 
 @app.route('/analyst',methods=['GET','POST'])
@@ -121,14 +124,43 @@ def analystQuery():
 		most_visit = mongo.db.command('aggregate','ccs',pipeline=pipeline1,explain=False)
 		most_visited = most_visit['result'][0]['_id']
 		most_visits = most_visit['result'][0]['nb']
-		print most_visited
 
-		gs_id = str(request.form['Gas Station ID'])
+		#gs_id = str(request.form['GasStationID'])
+		gs_id = 448 
 
-		pipeline2 = [{"$match":{"GasStation.ID":gs_id}}, {"$group":{"_id":"$Customer.ID"}}, {"$group":{"_id":None,"nb":{"$sum":1}}}]
+		mapf = Code('''
+		function(){
+    	Id=this.GasStation.ChainID;
+    	emit(Id,{"avg":this.Price,"sum":this.Price,"nb":1});
+		};
+		''')
+		reducef = Code('''
+		function(key,values){
+		    sum=0;
+		    nb=0;
+		    for(i=0;i<values.length;i++){
+		        sum+=values[i].sum;
+		        nb +=values[i].nb;
+		    }
+		    return {"avg":sum/nb,"sum":sum,"nb":nb};
+		};
+		''')
+
+		results_id = []
+		results_val = []
+
+		resultsf = mongo.db.ccs.map_reduce(map=mapf, reduce=reducef, out=SON([('inline',1)]))
+		# for i in range(len(resultsf['results'])):
+		# 	results.append(resultsf['results'][i]['_id'])
+		# 	results_val.append(resultsf['results'][i]['value']['sum'])
+		# 	if i == 10:
+		# 		break
+		print (resultsf['results'])
+		
+		pipeline2 = [{"$match":{"GasStation.ID":"448"}}, {"$group":{"_id":"$Customer.ID"}}, {"$group":{"_id":None,"nb":{"$sum":1}}}]
 		num_visited = mongo.db.command('aggregate','ccs',pipeline=pipeline2,explain=False)
 		num_visited = num_visited['result'][0]['nb']
-	 	
+
 	 	return render_template('analyst2.html',most_visited=most_visited,most_visits=most_visits, num_visitors=num_visited,gs_id=gs_id)
 	return render_template('analyst2.html',form=form,most_visited=most_visited)
 

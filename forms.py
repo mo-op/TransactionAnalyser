@@ -4,7 +4,7 @@ from wtforms import TextField, IntegerField, TextAreaField, SubmitField, RadioFi
 from wtforms import validators, ValidationError
 
 class AnalystForm(FlaskForm):
-	gasstation = IntegerField("Gas Station ID")
+	gasstation = IntegerField("GasStationID")
 	submit = SubmitField("Query")
 
 class LogInForm(FlaskForm):
